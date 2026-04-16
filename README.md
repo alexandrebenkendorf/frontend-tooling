@@ -139,14 +139,11 @@ npx lint-staged
 ## ESLint
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
 });
 ```
 
@@ -157,14 +154,11 @@ Test rules are framework-agnostic by default. If you use Vitest or Jest, opt int
 Disable parts of the shared setup:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   includeImport: false,
   includeReact: false,
   includeTest: false,
@@ -174,14 +168,11 @@ export default await createEslintConfig({
 Enable Vitest-specific test rules:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   testFramework: 'vitest',
 });
 ```
@@ -189,14 +180,11 @@ export default await createEslintConfig({
 Enable Jest-specific test rules:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   testFramework: 'jest',
 });
 ```
@@ -204,14 +192,11 @@ export default await createEslintConfig({
 Add a suffix to config names so they are easier to identify in ESLint output:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   nameSuffix: 'frontend',
 });
 ```
@@ -219,24 +204,15 @@ export default await createEslintConfig({
 Extend default ignore patterns and test file globs:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
-  ignores: {
-    extend: ['.generated', 'build-cache'],
-  },
+  tsconfigRootDir: import.meta.dirname,
+  ignores: ['.generated', 'build-cache'],
   patterns: {
-    testTsFiles: {
-      extend: ['**/*.e2e.ts', '**/*.cy.ts'],
-    },
-    importDevDependencyFiles: {
-      extend: ['playwright.config.ts'],
-    },
+    testTsFiles: ['**/*.{test,spec,vitest}.{ts,tsx}', '**/*.e2e.ts', '**/*.cy.ts'],
+    importDevDependencyFiles: ['build/**/*', 'scripts/**/*', 'eslint/**/*', 'playwright.config.ts'],
   },
 });
 ```
@@ -244,22 +220,16 @@ export default await createEslintConfig({
 Replace the default import aliases:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   importOptions: {
-    aliasMap: {
-      replace: true,
-      extend: [
-        ['@app', './src'],
-        ['@server', './server'],
-      ],
-    },
+    aliasMap: [
+      ['@app', './src'],
+      ['@server', './server'],
+    ],
   },
 });
 ```
@@ -267,14 +237,11 @@ export default await createEslintConfig({
 Override rules for specific config groups:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   rules: {
     js: {
       'no-console': 'off',
@@ -295,14 +262,11 @@ export default await createEslintConfig({
 Append your own flat configs after the shared ones:
 
 ```js
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: path.dirname(fileURLToPath(import.meta.url)),
+  tsconfigRootDir: import.meta.dirname,
   overrides: {
     extraConfigs: [
       {

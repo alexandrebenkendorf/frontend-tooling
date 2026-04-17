@@ -9,7 +9,21 @@ npm install -D @alexandrebenkendorf/frontend-tooling eslint prettier typescript
 npx frontend-tooling-init
 ```
 
-Install any peer dependencies your chosen config needs in the consuming project.
+Install only the peer dependencies your config actually uses:
+
+```sh
+# React projects
+npm install -D eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh eslint-plugin-jsx-a11y
+
+# Vitest projects
+npm install -D @vitest/eslint-plugin
+
+# Jest projects
+npm install -D eslint-plugin-jest
+
+# Import sorting in Prettier (opt-in)
+npm install -D @trivago/prettier-plugin-sort-imports
+```
 
 The init command is explicit on purpose. Installing the package does not silently rewrite the consumer repo. Instead, `frontend-tooling-init` patches the current project with the shared setup in a reviewable way.
 
@@ -304,6 +318,22 @@ export default {
   singleQuote: false,
 };
 ```
+
+### Import sorting (opt-in)
+
+Import sorting via `@trivago/prettier-plugin-sort-imports` is not included by default. Enable it by installing the package and using the exported `sortImportsConfig`:
+
+```sh
+npm install -D @trivago/prettier-plugin-sort-imports
+```
+
+```js
+import baseConfig, { sortImportsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default { ...baseConfig, ...sortImportsConfig };
+```
+
+`sortImportsConfig` includes the `importOrder` groups, parser plugins, and the sort-imports Prettier plugin. It merges the `plugins` array with the base config so `prettier-plugin-ejs` is preserved.
 
 ## TypeScript
 

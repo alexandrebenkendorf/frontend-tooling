@@ -99,8 +99,29 @@ async function updatePackageJson() {
 async function ensureTsconfigJson() {
   const targetPath = path.join(cwd, 'tsconfig.json');
   const content = `{
-  "extends": "${packageName}/tsconfig.json"
+  "extends": "${packageName}/tsconfig/base.json",
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"]
 }
+`;
+  await writeManagedFile(targetPath, content);
+}
+
+async function ensurePrettierConfig() {
+  const targetPath = path.join(cwd, 'prettier.config.mjs');
+  const content = `export { default } from '${packageName}/prettier';\n`;
+  await writeManagedFile(targetPath, content);
+}
+
+async function ensurePrettierIgnore() {
+  const targetPath = path.join(cwd, '.prettierignore');
+  const content = `dist
+node_modules
+coverage
+*.min.js
+*.min.css
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 `;
   await writeManagedFile(targetPath, content);
 }
@@ -206,6 +227,10 @@ function detectExistingConfigFiles() {
     'eslint.config.mjs',
     'tsconfig.json',
     'tsconfig.eslint.json',
+    'prettier.config.js',
+    'prettier.config.cjs',
+    'prettier.config.mjs',
+    '.prettierignore',
     'lint-staged.config.js',
     'lint-staged.config.cjs',
     'lint-staged.config.mjs',
@@ -229,6 +254,8 @@ await ensureEditorConfig();
 await ensureTsconfigJson();
 await ensureTsconfigEslintJson();
 await ensureEslintConfig();
+await ensurePrettierConfig();
+await ensurePrettierIgnore();
 await ensureLintStagedConfig();
 await ensureHuskyPreCommit();
 

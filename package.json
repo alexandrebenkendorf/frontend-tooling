@@ -51,34 +51,65 @@
     "prettier",
     "scripts/init.mjs",
     "tsconfig/",
+    "CHANGELOG.md",
     "README.md"
   ],
   "dependencies": {
     "@eslint/js": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-alias": "^1.1.2",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-no-only-tests": "^2.6.0",
+    "globals": "^16.0.0",
+    "prettier-plugin-ejs": "^1.0.3",
+    "typescript-eslint": "^8.48.1"
+  },
+  "peerDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.0",
     "@vitest/eslint-plugin": "^1.0.0",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-import-resolver-alias": "1.1.2",
-    "eslint-import-resolver-typescript": "4.4.4",
-    "eslint-plugin-import": "^2.32.0",
+    "eslint": "^9.0.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-no-only-tests": "2.6.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.0.0",
-    "prettier-plugin-ejs": "^1.0.3",
-    "typescript-eslint": "8.48.1"
-  },
-  "peerDependencies": {
-    "eslint": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^5.0.0"
   },
+  "peerDependenciesMeta": {
+    "@trivago/prettier-plugin-sort-imports": {
+      "optional": true
+    },
+    "@vitest/eslint-plugin": {
+      "optional": true
+    },
+    "eslint-plugin-jest": {
+      "optional": true
+    },
+    "eslint-plugin-jsx-a11y": {
+      "optional": true
+    },
+    "eslint-plugin-react": {
+      "optional": true
+    },
+    "eslint-plugin-react-hooks": {
+      "optional": true
+    },
+    "eslint-plugin-react-refresh": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^6.0.0",
+    "@vitest/eslint-plugin": "^1.0.0",
     "eslint": "^9.39.1",
-    "husky": "9.1.7",
+    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
     "prettier": "^3.6.2",
     "typescript": "^5.9.3"

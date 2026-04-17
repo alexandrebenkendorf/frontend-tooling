@@ -40,6 +40,7 @@ export const DEFAULT_PATTERNS = {
 export const DEFAULT_IGNORES = [
   '**/dist/**/*',
   '**/node_modules/**/*',
+  '**/*.d.{ts,mts,cts}',
   '.git',
   '.cache',
   '.next',

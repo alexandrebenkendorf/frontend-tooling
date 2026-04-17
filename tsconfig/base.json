@@ -1,7 +1,6 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
-    /* Bundler mode */
     "outDir": "dist",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -14,16 +13,12 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-
-    /* Strictness */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "strictPropertyInitialization": false,
-
-    /* Interop */
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,

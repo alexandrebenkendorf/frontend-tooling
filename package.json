@@ -40,10 +40,9 @@
     },
     "./lint-staged": "./lint-staged/index.mjs",
     "./prettier": "./prettier/index.mjs",
-    "./tsconfig.json": "./tsconfig.json",
-    "./tsconfig/base.json": "./tsconfig.base.json",
-    "./tsconfig/node.json": "./tsconfig.node.json",
-    "./tsconfig/eslint.json": "./tsconfig.eslint.json"
+    "./tsconfig/base.json": "./tsconfig/base.json",
+    "./tsconfig/node.json": "./tsconfig/node.json",
+    "./tsconfig/eslint.json": "./tsconfig/eslint.json"
   },
   "files": [
     ".editorconfig",
@@ -51,10 +50,7 @@
     "lint-staged",
     "prettier",
     "scripts/init.mjs",
-    "tsconfig.json",
-    "tsconfig.base.json",
-    "tsconfig.eslint.json",
-    "tsconfig.node.json",
+    "tsconfig/",
     "README.md"
   ],
   "dependencies": {

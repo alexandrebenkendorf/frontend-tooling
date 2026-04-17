@@ -10,10 +10,23 @@ const config = {
   bracketSameLine: false,
   arrowParens: 'always',
   singleAttributePerLine: true,
-  plugins: ['prettier-plugin-ejs'],
 };
 
 export default config;
+
+/**
+ * Prettier settings for `prettier-plugin-ejs`.
+ * Spread this into your Prettier config to enable EJS template formatting.
+ *
+ * Requires `prettier-plugin-ejs` installed as a dev dependency.
+ *
+ * @example
+ * import baseConfig, { ejsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+ * export default { ...baseConfig, ...ejsConfig };
+ */
+export const ejsConfig = {
+  plugins: ['prettier-plugin-ejs'],
+};
 
 /**
  * Prettier settings for `@trivago/prettier-plugin-sort-imports`.
@@ -32,5 +45,5 @@ export const sortImportsConfig = {
   importOrderSortSpecifiers: true,
   importOrderGroupNamespaceSpecifiers: true,
   importOrderCaseInsensitive: true,
-  plugins: [...config.plugins, '@trivago/prettier-plugin-sort-imports'],
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
 };

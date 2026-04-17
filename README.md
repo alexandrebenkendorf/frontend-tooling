@@ -23,6 +23,9 @@ npm install -D eslint-plugin-jest
 
 # Import sorting in Prettier (opt-in)
 npm install -D @trivago/prettier-plugin-sort-imports
+
+# EJS formatting (opt-in)
+npm install -D prettier-plugin-ejs
 ```
 
 The init command is explicit on purpose. Installing the package does not silently rewrite the consumer repo. Instead, `frontend-tooling-init` patches the current project with the shared setup in a reviewable way.
@@ -319,6 +322,20 @@ export default {
 };
 ```
 
+### EJS formatting (opt-in)
+
+EJS template formatting via `prettier-plugin-ejs` is not included by default. Enable it by installing the package and using the exported `ejsConfig`:
+
+```sh
+npm install -D prettier-plugin-ejs
+```
+
+```js
+import baseConfig, { ejsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default { ...baseConfig, ...ejsConfig };
+```
+
 ### Import sorting (opt-in)
 
 Import sorting via `@trivago/prettier-plugin-sort-imports` is not included by default. Enable it by installing the package and using the exported `sortImportsConfig`:
@@ -333,7 +350,18 @@ import baseConfig, { sortImportsConfig } from '@alexandrebenkendorf/frontend-too
 export default { ...baseConfig, ...sortImportsConfig };
 ```
 
-`sortImportsConfig` includes the `importOrder` groups, parser plugins, and the sort-imports Prettier plugin. It merges the `plugins` array with the base config so `prettier-plugin-ejs` is preserved.
+To use both together:
+
+```js
+import baseConfig, { ejsConfig, sortImportsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default {
+  ...baseConfig,
+  ...ejsConfig,
+  ...sortImportsConfig,
+  plugins: [...ejsConfig.plugins, ...sortImportsConfig.plugins],
+};
+```
 
 ## TypeScript
 

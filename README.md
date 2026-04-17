@@ -20,6 +20,8 @@ By default, it:
 - creates `tsconfig.json` if missing
 - creates `tsconfig.eslint.json` if missing
 - creates `eslint.config.mjs` if missing
+- creates `prettier.config.mjs` if missing
+- creates `.prettierignore` if missing
 - creates `lint-staged.config.mjs` if missing
 - creates `.husky/pre-commit` unless `--skip-husky` is used
 
@@ -130,7 +132,6 @@ npx lint-staged
 - `@alexandrebenkendorf/frontend-tooling/eslint`
 - `@alexandrebenkendorf/frontend-tooling/lint-staged`
 - `@alexandrebenkendorf/frontend-tooling/prettier`
-- `@alexandrebenkendorf/frontend-tooling/tsconfig.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/eslint.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/node.json`
@@ -308,15 +309,8 @@ export default {
 
 ```json
 {
-  "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig.json"
-}
-```
-
-If you only want the lower-level base settings, extend the base config directly.
-
-```json
-{
-  "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig/base.json"
+  "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig/base.json",
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"]
 }
 ```
 

@@ -60,7 +60,6 @@ Current exported package surface:
 - `@alexandrebenkendorf/frontend-tooling/eslint`
 - `@alexandrebenkendorf/frontend-tooling/lint-staged`
 - `@alexandrebenkendorf/frontend-tooling/prettier`
-- `@alexandrebenkendorf/frontend-tooling/tsconfig.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/eslint.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/node.json`

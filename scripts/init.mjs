@@ -3,12 +3,14 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { createInterface } from 'node:readline/promises';
 import { fileURLToPath } from 'node:url';
 
 const cwd = process.cwd();
 const args = new Set(process.argv.slice(2));
 const force = args.has('--force');
 const skipHusky = args.has('--skip-husky');
+const yes = args.has('--yes') || args.has('-y') || !process.stdin.isTTY;
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packageJsonPath = path.join(packageRoot, 'package.json');
@@ -21,6 +23,68 @@ const packageDevDependencies = packageJson.devDependencies ?? {};
 
 const results = [];
 const notices = [];
+
+// --- Prompt helpers ---
+
+let rl;
+
+function getRl() {
+  if (!rl) {
+    rl = createInterface({ input: process.stdin, output: process.stdout });
+  }
+  return rl;
+}
+
+async function confirm(question, defaultValue = false) {
+  if (yes) return defaultValue;
+  const hint = defaultValue ? 'Y/n' : 'y/N';
+  const answer = await getRl().question(`  ${question} (${hint}): `);
+  const trimmed = answer.trim().toLowerCase();
+  if (!trimmed) return defaultValue;
+  return trimmed === 'y' || trimmed === 'yes';
+}
+
+async function choose(question, options, defaultValue) {
+  if (yes) return defaultValue;
+  const hint = options.join('/');
+  const answer = await getRl().question(`  ${question} (${hint}): `);
+  const trimmed = answer.trim().toLowerCase();
+  return options.includes(trimmed) ? trimmed : defaultValue;
+}
+
+async function collectChoices({ willCreatePrettier, willCreateEslint }) {
+  const choices = {
+    react: false,
+    testFramework: 'none',
+    prettierEjs: false,
+    prettierSortImports: false,
+  };
+
+  if (!willCreatePrettier && !willCreateEslint) return choices;
+
+  if (!yes) {
+    console.log('\nConfigure new config files:\n');
+  }
+
+  if (willCreateEslint) {
+    choices.react = await confirm('Use React?');
+    choices.testFramework = await choose('Test framework?', ['vitest', 'jest', 'none'], 'none');
+  }
+
+  if (willCreatePrettier) {
+    choices.prettierSortImports = await confirm('Add import sorting? (requires @trivago/prettier-plugin-sort-imports)');
+    choices.prettierEjs = await confirm('Add EJS formatting support? (requires prettier-plugin-ejs)');
+  }
+
+  if (rl) {
+    rl.close();
+    rl = null;
+  }
+
+  return choices;
+}
+
+// --- Utilities ---
 
 function logResult(status, target, detail = '') {
   results.push({ status, target, detail });
@@ -54,7 +118,7 @@ async function writeManagedFile(filePath, content) {
   logResult(existedBefore ? 'updated' : 'created', path.relative(cwd, filePath));
 }
 
-async function updatePackageJson() {
+async function updatePackageJson(choices) {
   const targetPath = path.join(cwd, 'package.json');
   const exists = existsSync(targetPath);
   const target = exists
@@ -80,8 +144,45 @@ async function updatePackageJson() {
 
   target.devDependencies[packageName] ??= `^${packageVersion}`;
 
-  for (const [dependency, version] of Object.entries(peerDependencies)) {
-    target.devDependencies[dependency] ??= version;
+  // Required peer deps — always added
+  const requiredPeerDeps = ['eslint', 'prettier', 'typescript'];
+  for (const dep of requiredPeerDeps) {
+    if (peerDependencies[dep]) {
+      target.devDependencies[dep] ??= peerDependencies[dep];
+    }
+  }
+
+  // Optional peer deps — only added based on choices
+  if (choices.react) {
+    for (const dep of [
+      'eslint-plugin-react',
+      'eslint-plugin-react-hooks',
+      'eslint-plugin-react-refresh',
+      'eslint-plugin-jsx-a11y',
+    ]) {
+      if (peerDependencies[dep]) target.devDependencies[dep] ??= peerDependencies[dep];
+    }
+  }
+  if (choices.testFramework === 'vitest') {
+    if (peerDependencies['@vitest/eslint-plugin']) {
+      target.devDependencies['@vitest/eslint-plugin'] ??= peerDependencies['@vitest/eslint-plugin'];
+    }
+  }
+  if (choices.testFramework === 'jest') {
+    if (peerDependencies['eslint-plugin-jest']) {
+      target.devDependencies['eslint-plugin-jest'] ??= peerDependencies['eslint-plugin-jest'];
+    }
+  }
+  if (choices.prettierSortImports) {
+    if (peerDependencies['@trivago/prettier-plugin-sort-imports']) {
+      target.devDependencies['@trivago/prettier-plugin-sort-imports'] ??=
+        peerDependencies['@trivago/prettier-plugin-sort-imports'];
+    }
+  }
+  if (choices.prettierEjs) {
+    if (peerDependencies['prettier-plugin-ejs']) {
+      target.devDependencies['prettier-plugin-ejs'] ??= peerDependencies['prettier-plugin-ejs'];
+    }
   }
 
   target.devDependencies['lint-staged'] ??= packageDevDependencies['lint-staged'] ?? '^15';
@@ -106,9 +207,34 @@ async function ensureTsconfigJson() {
   await writeManagedFile(targetPath, content);
 }
 
-async function ensurePrettierConfig() {
+async function ensurePrettierConfig(choices) {
   const targetPath = path.join(cwd, 'prettier.config.mjs');
-  const content = `export { default } from '${packageName}/prettier';\n`;
+
+  let content;
+  if (choices.prettierEjs && choices.prettierSortImports) {
+    content = `import baseConfig, { ejsConfig, sortImportsConfig } from '${packageName}/prettier';
+
+export default {
+  ...baseConfig,
+  ...ejsConfig,
+  ...sortImportsConfig,
+  plugins: [...ejsConfig.plugins, ...sortImportsConfig.plugins],
+};
+`;
+  } else if (choices.prettierEjs) {
+    content = `import baseConfig, { ejsConfig } from '${packageName}/prettier';
+
+export default { ...baseConfig, ...ejsConfig };
+`;
+  } else if (choices.prettierSortImports) {
+    content = `import baseConfig, { sortImportsConfig } from '${packageName}/prettier';
+
+export default { ...baseConfig, ...sortImportsConfig };
+`;
+  } else {
+    content = `export { default } from '${packageName}/prettier';\n`;
+  }
+
   await writeManagedFile(targetPath, content);
 }
 
@@ -136,13 +262,20 @@ async function ensureTsconfigEslintJson() {
   await writeManagedFile(targetPath, content);
 }
 
-async function ensureEslintConfig() {
+async function ensureEslintConfig(choices) {
   const targetPath = path.join(cwd, 'eslint.config.mjs');
+
+  const optionLines = [];
+  if (!choices.react) optionLines.push(`  includeReact: false,`);
+  if (choices.testFramework !== 'none') optionLines.push(`  testFramework: '${choices.testFramework}',`);
+
+  const extraOptions = optionLines.length > 0 ? `\n${optionLines.join('\n')}` : '';
+
   const content = `import createEslintConfig from '${packageName}/eslint';
 
 export default await createEslintConfig({
   project: ['./tsconfig.eslint.json'],
-  tsconfigRootDir: import.meta.dirname,
+  tsconfigRootDir: import.meta.dirname,${extraOptions}
 });
 `;
   await writeManagedFile(targetPath, content);
@@ -249,12 +382,17 @@ function detectExistingConfigFiles() {
   return configFiles.filter((file) => existsSync(path.join(cwd, file)));
 }
 
-const updatedPackageJson = await updatePackageJson();
+const willCreatePrettier = !existsSync(path.join(cwd, 'prettier.config.mjs')) || force;
+const willCreateEslint = !existsSync(path.join(cwd, 'eslint.config.mjs')) || force;
+
+const choices = await collectChoices({ willCreatePrettier, willCreateEslint });
+
+const updatedPackageJson = await updatePackageJson(choices);
 await ensureEditorConfig();
 await ensureTsconfigJson();
 await ensureTsconfigEslintJson();
-await ensureEslintConfig();
-await ensurePrettierConfig();
+await ensureEslintConfig(choices);
+await ensurePrettierConfig(choices);
 await ensurePrettierIgnore();
 await ensureLintStagedConfig();
 await ensureHuskyPreCommit();

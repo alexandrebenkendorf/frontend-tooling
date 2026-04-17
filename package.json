@@ -50,6 +50,7 @@
     "lint-staged",
     "prettier",
     "scripts/init.mjs",
+    "scripts/lib/",
     "tsconfig/",
     "CHANGELOG.md",
     "README.md"

@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [Unreleased]
+
+---
+
+## [1.3.0] - 2026-04-18
+
+### Fixed
+
+- Awaited the async test config builder in `createEslintConfig` so consumer ESLint loads no longer fail with `TypeError: testConfigs is not iterable`.
+
+### Changed
+
+- Bumped the shared tooling dependency ranges, including `typescript` 6 support and newer optional ESLint/Prettier peer versions, while keeping `eslint` on 9.x because `eslint-plugin-import` does not yet support ESLint 10.
+
+---
+
 ## [1.2.0] - 2026-04-17
 
 ### Changed

@@ -50,7 +50,9 @@ export default async function createEslintConfig({
       })
     : [];
   const testConfigs = includeTest
-    ? (await import('./test.eslint.mjs')).createTestConfigs({
+    ? await (
+        await import('./test.eslint.mjs')
+      ).createTestConfigs({
         patterns: resolvedPatterns,
         nameSuffix,
         rules,

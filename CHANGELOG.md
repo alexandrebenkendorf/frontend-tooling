@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.3.1] - 2026-04-18
+
+### Changed
+
+- Expanded the shared test and dev-only file globs to cover colocated `*.bench.*`, `*.e2e.*`, `*.cy.*`, and `*.test-utils.*` files consistently, preventing false `import/no-extraneous-dependencies` errors in consumer repos.
+
+---
+
 ## [1.3.0] - 2026-04-18
 
 ### Fixed

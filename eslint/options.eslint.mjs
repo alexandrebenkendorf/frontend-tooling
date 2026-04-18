@@ -1,5 +1,10 @@
 import { resolveListOption } from './helpers.eslint.mjs';
 
+const TEST_FILE_SUFFIXES = ['test', 'spec', 'vitest', 'bench', 'e2e', 'cy'];
+const TEST_JS_FILE_GLOB = `**/*.{${TEST_FILE_SUFFIXES.join(',')}}.{js,jsx,mjs,cjs}`;
+const TEST_TS_FILE_GLOB = `**/*.{${TEST_FILE_SUFFIXES.join(',')}}.{ts,tsx,mts,cts}`;
+const DEV_TEST_FILE_GLOB = `**/*.{${TEST_FILE_SUFFIXES.join(',')}}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}`;
+
 export const DEFAULT_PATTERNS = {
   jsFiles: ['**/*.{js,jsx,mjs,cjs,ejs}'],
   tsFiles: ['**/*.{ts,tsx,mts,cts}'],
@@ -7,22 +12,16 @@ export const DEFAULT_PATTERNS = {
   reactTsFiles: ['**/*.tsx'],
   srcJsFiles: ['**/src/**/*.{js,jsx,mjs,cjs,ejs}'],
   srcTsFiles: ['**/src/**/*.{ts,tsx,mts,cts}'],
-  testJsFiles: [
-    '**/*.{test,spec,vitest}.{js,jsx,mjs,cjs}',
-    '**/__tests__/**/*.{js,jsx,mjs,cjs}',
-    '**/__mocks__/**/*.{js,jsx,mjs,cjs}',
-  ],
-  testTsFiles: [
-    '**/*.{test,spec,vitest}.{ts,tsx,mts,cts}',
-    '**/__tests__/**/*.{ts,tsx,mts,cts}',
-    '**/__mocks__/**/*.{ts,tsx,mts,cts}',
-  ],
+  testJsFiles: [TEST_JS_FILE_GLOB, '**/__tests__/**/*.{js,jsx,mjs,cjs}', '**/__mocks__/**/*.{js,jsx,mjs,cjs}'],
+  testTsFiles: [TEST_TS_FILE_GLOB, '**/__tests__/**/*.{ts,tsx,mts,cts}', '**/__mocks__/**/*.{ts,tsx,mts,cts}'],
   importDevDependencyFiles: [
     'build/**/*',
     'scripts/**/*',
     'eslint/**/*',
     'eslint.*',
     '.storybook/**/*',
+    DEV_TEST_FILE_GLOB,
+    '**/*.test-utils.{js,jsx,ts,tsx,mjs,cjs,mts,cts}',
     '**/test/**/*',
     '**/__tests__/**/*',
     '**/__mocks__/**/*',

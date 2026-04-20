@@ -10,10 +10,29 @@ import { collectChoices } from './lib/prompt.mjs';
 import { createWriters } from './lib/writers.mjs';
 
 const cwd = process.cwd();
-const args = new Set(process.argv.slice(2));
-const force = args.has('--force');
-const skipHusky = args.has('--skip-husky');
-const yes = args.has('--yes') || args.has('-y') || !process.stdin.isTTY;
+const rawArgs = process.argv.slice(2);
+const argSet = new Set(rawArgs);
+const getArgValue = (flag) =>
+  rawArgs
+    .find((a) => a.startsWith(`${flag}=`))
+    ?.split('=')
+    .slice(1)
+    .join('=');
+
+const force = argSet.has('--force');
+const dryRun = argSet.has('--dry-run');
+const skipHusky = argSet.has('--skip-husky');
+const yes = argSet.has('--yes') || argSet.has('-y') || !process.stdin.isTTY;
+
+const flagChoices = {};
+if (argSet.has('--react')) flagChoices.react = true;
+if (argSet.has('--no-react')) flagChoices.react = false;
+const testFlag = getArgValue('--test');
+if (testFlag) flagChoices.testFramework = ['vitest', 'jest', 'none'].includes(testFlag) ? testFlag : 'none';
+if (argSet.has('--prettier-sort-imports')) flagChoices.prettierSortImports = true;
+if (argSet.has('--no-prettier-sort-imports')) flagChoices.prettierSortImports = false;
+if (argSet.has('--prettier-ejs')) flagChoices.prettierEjs = true;
+if (argSet.has('--no-prettier-ejs')) flagChoices.prettierEjs = false;
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const packageJson = JSON.parse(await readFile(path.join(packageRoot, 'package.json'), 'utf8'));
@@ -37,7 +56,7 @@ function addNotice(message) {
 const willCreatePrettier = !existsSync(path.join(cwd, 'prettier.config.mjs')) || force;
 const willCreateEslint = !existsSync(path.join(cwd, 'eslint.config.mjs')) || force;
 
-const choices = await collectChoices({ yes, willCreatePrettier, willCreateEslint });
+const choices = await collectChoices({ yes, willCreatePrettier, willCreateEslint, flagChoices });
 
 const {
   updatePackageJson,
@@ -51,6 +70,7 @@ const {
   ensureHuskyPreCommit,
 } = createWriters({
   cwd,
+  dryRun,
   force,
   skipHusky,
   packageName,
@@ -89,7 +109,7 @@ if (legacyEslintDependencies.length > 0) {
   );
 }
 
-console.log(`Initialized ${packageName} in ${cwd}\n`);
+console.log(`${dryRun ? 'Dry run for' : 'Initialized'} ${packageName} in ${cwd}\n`);
 for (const result of results) {
   console.log(`- ${result.status}: ${result.target}${result.detail ? ` (${result.detail})` : ''}`);
 }
@@ -101,7 +121,11 @@ if (notices.length > 0) {
   }
 }
 
-console.log('\nNext steps:');
-console.log('- Run your package manager install command to sync dependencies and hook setup.');
-console.log('- Review any skipped files and merge the shared setup manually if needed.');
-console.log('- Use --force if you want this initializer to overwrite supported generated files.');
+if (dryRun) {
+  console.log('\n(Dry run — no files were written.)');
+} else {
+  console.log('\nNext steps:');
+  console.log('- Run your package manager install command to sync dependencies and hook setup.');
+  console.log('- Review any skipped files and merge the shared setup manually if needed.');
+  console.log('- Use --force if you want this initializer to overwrite supported generated files.');
+}

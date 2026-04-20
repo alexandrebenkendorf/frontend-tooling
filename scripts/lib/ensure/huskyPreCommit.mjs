@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { ensureDir } from '../fs.mjs';
 
-export async function ensureHuskyPreCommit({ cwd, force, skipHusky, logResult }) {
+export async function ensureHuskyPreCommit({ cwd, dryRun, force, skipHusky, logResult }) {
   if (skipHusky) {
     return;
   }
@@ -18,6 +18,11 @@ export async function ensureHuskyPreCommit({ cwd, force, skipHusky, logResult })
 
   if (existedBefore && !force) {
     logResult('skipped', '.husky/pre-commit', 'already exists');
+    return;
+  }
+
+  if (dryRun) {
+    logResult(existedBefore ? 'would update' : 'would create', '.husky/pre-commit');
     return;
   }
 

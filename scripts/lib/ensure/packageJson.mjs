@@ -4,7 +4,7 @@ import path from 'node:path';
 import { readJson, writeJson } from '../fs.mjs';
 
 export async function updatePackageJson(
-  { cwd, skipHusky, packageName, packageVersion, peerDependencies, packageDevDependencies, logResult },
+  { cwd, dryRun, skipHusky, packageName, packageVersion, peerDependencies, packageDevDependencies, logResult },
   choices
 ) {
   const targetPath = path.join(cwd, 'package.json');
@@ -63,6 +63,11 @@ export async function updatePackageJson(
   target.devDependencies['lint-staged'] ??= packageDevDependencies['lint-staged'] ?? '^15';
   if (!skipHusky) {
     target.devDependencies.husky ??= packageDevDependencies.husky ?? '^9';
+  }
+
+  if (dryRun) {
+    logResult(exists ? 'would update' : 'would create', 'package.json');
+    return target;
   }
 
   await writeJson(targetPath, target);

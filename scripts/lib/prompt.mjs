@@ -1,77 +1,76 @@
-import { createInterface } from 'node:readline/promises';
+import { cancel, confirm, intro, isCancel, select } from '@clack/prompts';
 
-export function createPrompter(yes) {
-  let rl;
-
-  function getRl() {
-    if (!rl) {
-      rl = createInterface({ input: process.stdin, output: process.stdout });
-    }
-    return rl;
-  }
-
-  function close() {
-    if (rl) {
-      rl.close();
-      rl = null;
-    }
-  }
-
-  async function confirm(question, defaultValue = false) {
-    if (yes) {
-      return defaultValue;
-    }
-    const hint = defaultValue ? 'Y/n' : 'y/N';
-    const answer = await getRl().question(`  ${question} (${hint}): `);
-    const trimmed = answer.trim().toLowerCase();
-    if (!trimmed) {
-      return defaultValue;
-    }
-    return trimmed === 'y' || trimmed === 'yes';
-  }
-
-  async function choose(question, options, defaultValue) {
-    if (yes) {
-      return defaultValue;
-    }
-    const hint = options.join('/');
-    const answer = await getRl().question(`  ${question} (${hint}): `);
-    const trimmed = answer.trim().toLowerCase();
-    return options.includes(trimmed) ? trimmed : defaultValue;
-  }
-
-  return { confirm, choose, close };
-}
-
-export async function collectChoices({ yes, willCreatePrettier, willCreateEslint }) {
+export async function collectChoices({ yes, willCreatePrettier, willCreateEslint, flagChoices = {} }) {
   const choices = {
     react: false,
     testFramework: 'none',
-    prettierEjs: false,
     prettierSortImports: false,
+    prettierEjs: false,
+    ...flagChoices,
   };
 
   if (!willCreatePrettier && !willCreateEslint) {
     return choices;
   }
 
-  const { confirm, choose, close } = createPrompter(yes);
+  const needsReactPrompt = willCreateEslint && flagChoices.react === undefined;
+  const needsTestPrompt = willCreateEslint && flagChoices.testFramework === undefined;
+  const needsSortImportsPrompt = willCreatePrettier && flagChoices.prettierSortImports === undefined;
+  const needsEjsPrompt = willCreatePrettier && flagChoices.prettierEjs === undefined;
+  const anyPromptsNeeded = needsReactPrompt || needsTestPrompt || needsSortImportsPrompt || needsEjsPrompt;
 
-  if (!yes) {
-    console.log('\nConfigure new config files:\n');
+  if (yes || !anyPromptsNeeded) {
+    return choices;
   }
 
-  if (willCreateEslint) {
-    choices.react = await confirm('Use React?');
-    choices.testFramework = await choose('Test framework?', ['vitest', 'jest', 'none'], 'none');
+  intro('Configure new config files');
+
+  if (needsReactPrompt) {
+    const result = await confirm({ message: 'Use React?' });
+    if (isCancel(result)) {
+      cancel('Aborted.');
+      process.exit(0);
+    }
+    choices.react = result;
   }
 
-  if (willCreatePrettier) {
-    choices.prettierSortImports = await confirm('Add import sorting? (requires @trivago/prettier-plugin-sort-imports)');
-    choices.prettierEjs = await confirm('Add EJS formatting support? (requires prettier-plugin-ejs)');
+  if (needsTestPrompt) {
+    const result = await select({
+      message: 'Test framework?',
+      options: [
+        { value: 'none', label: 'None' },
+        { value: 'vitest', label: 'Vitest' },
+        { value: 'jest', label: 'Jest' },
+      ],
+    });
+    if (isCancel(result)) {
+      cancel('Aborted.');
+      process.exit(0);
+    }
+    choices.testFramework = result;
   }
 
-  close();
+  if (needsSortImportsPrompt) {
+    const result = await confirm({
+      message: 'Add import sorting? (requires @trivago/prettier-plugin-sort-imports)',
+    });
+    if (isCancel(result)) {
+      cancel('Aborted.');
+      process.exit(0);
+    }
+    choices.prettierSortImports = result;
+  }
+
+  if (needsEjsPrompt) {
+    const result = await confirm({
+      message: 'Add EJS formatting support? (requires prettier-plugin-ejs)',
+    });
+    if (isCancel(result)) {
+      cancel('Aborted.');
+      process.exit(0);
+    }
+    choices.prettierEjs = result;
+  }
 
   return choices;
 }

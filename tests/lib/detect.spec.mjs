@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { detectLegacyEslintDependencies } from './detect.mjs';
+import { detectLegacyEslintDependencies } from '../../scripts/lib/detect.mjs';
 
 describe('detectLegacyEslintDependencies', () => {
   it('should return an empty array when there are no legacy deps', () => {

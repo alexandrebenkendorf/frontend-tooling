@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ensureTsconfigEslintJson, ensureTsconfigJson } from './tsconfig.mjs';
+import { ensureTsconfigEslintJson, ensureTsconfigJson } from '../../scripts/lib/ensure/tsconfig.mjs';
 
 function makeCtx() {
   let writtenPath;

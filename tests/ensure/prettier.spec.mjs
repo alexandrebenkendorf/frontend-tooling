@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ensurePrettierConfig, ensurePrettierIgnore } from './prettier.mjs';
+import { ensurePrettierConfig, ensurePrettierIgnore } from '../../scripts/lib/ensure/prettier.mjs';
 
 function makeCtx() {
   let writtenPath;

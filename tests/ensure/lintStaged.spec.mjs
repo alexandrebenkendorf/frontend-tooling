@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ensureLintStagedConfig } from './lintStaged.mjs';
+import { ensureLintStagedConfig } from '../../scripts/lib/ensure/lintStaged.mjs';
 
 describe('ensureLintStagedConfig', () => {
   it('should generate a config that imports from the package', async () => {

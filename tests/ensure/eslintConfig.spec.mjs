@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ensureEslintConfig } from './eslintConfig.mjs';
+import { ensureEslintConfig } from '../../scripts/lib/ensure/eslintConfig.mjs';
 
 function makeCtx(overrides = {}) {
   let writtenPath;

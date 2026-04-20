@@ -158,7 +158,9 @@ git commit -m "chore: Add Husky pre-commit hook"
 ### Key Principles
 
 - Validate exported behavior and package shape, not app runtime.
-- Prefer verification commands over framework-specific test examples.
+- Test files live co-located with their source (e.g. `scripts/lib/ensure/prettier.spec.mjs` next to `prettier.mjs`).
+- Use `vitest` with `describe` / `it('should ...')` — BDD-style descriptions.
+- Mock the `write` callback in `ensure/` tests rather than touching the filesystem.
 - When package surface changes, always run `npm pack --dry-run --cache /tmp/frontend-tooling-npm-cache`.
 - If the initializer changes, test both a clean temp repo and an existing repo scenario when possible.
 
@@ -177,6 +179,9 @@ npm run lint:fix
 # Formatting
 npm run format
 npm run format:check
+
+# Tests
+npm test
 
 # Staged files
 npm run lint-staged

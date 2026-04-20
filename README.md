@@ -47,7 +47,27 @@ Useful options:
 ```sh
 npx frontend-tooling-init --skip-husky
 npx frontend-tooling-init --force
+npx frontend-tooling-init --dry-run
 ```
+
+All prompts can also be answered non-interactively via flags:
+
+```sh
+npx frontend-tooling-init --react --test=vitest --prettier-sort-imports
+npx frontend-tooling-init --no-react --test=jest
+npx frontend-tooling-init --yes  # accept all defaults silently
+```
+
+| Flag                                                     | Description                                                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------ |
+| `--dry-run`                                              | Preview what would be created or updated without writing any files |
+| `--force`                                                | Overwrite existing managed config files                            |
+| `--skip-husky`                                           | Skip Husky pre-commit hook setup                                   |
+| `--yes` / `-y`                                           | Accept all prompt defaults non-interactively                       |
+| `--react` / `--no-react`                                 | Enable or disable React ESLint config                              |
+| `--test=vitest\|jest\|none`                              | Set the test framework for ESLint rules                            |
+| `--prettier-sort-imports` / `--no-prettier-sort-imports` | Enable or disable import sorting                                   |
+| `--prettier-ejs` / `--no-prettier-ejs`                   | Enable or disable EJS formatting                                   |
 
 ### Legacy apps
 

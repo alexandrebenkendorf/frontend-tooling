@@ -56,6 +56,8 @@ function addNotice(message) {
 const willCreatePrettier = !existsSync(path.join(cwd, 'prettier.config.mjs')) || force;
 const willCreateEslint = !existsSync(path.join(cwd, 'eslint.config.mjs')) || force;
 
+const existingConfigFiles = detectExistingConfigFiles(cwd);
+
 const choices = await collectChoices({ yes, willCreatePrettier, willCreateEslint, flagChoices });
 
 const {
@@ -91,7 +93,6 @@ await ensurePrettierIgnore();
 await ensureLintStagedConfig();
 await ensureHuskyPreCommit();
 
-const existingConfigFiles = detectExistingConfigFiles(cwd);
 const legacyEslintDependencies = detectLegacyEslintDependencies(updatedPackageJson);
 
 if (existingConfigFiles.length > 0) {

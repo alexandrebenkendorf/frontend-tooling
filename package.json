@@ -14,6 +14,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint-staged": "lint-staged",
+    "test": "vitest run",
     "prepare": "husky"
   },
   "publishConfig": {
@@ -38,8 +39,14 @@
       "types": "./eslint/createEslintConfig.d.mts",
       "default": "./eslint/createEslintConfig.mjs"
     },
-    "./lint-staged": "./lint-staged/index.mjs",
-    "./prettier": "./prettier/index.mjs",
+    "./lint-staged": {
+      "types": "./lint-staged/index.d.mts",
+      "default": "./lint-staged/index.mjs"
+    },
+    "./prettier": {
+      "types": "./prettier/index.d.mts",
+      "default": "./prettier/index.mjs"
+    },
     "./tsconfig/base.json": "./tsconfig/base.json",
     "./tsconfig/node.json": "./tsconfig/node.json",
     "./tsconfig/eslint.json": "./tsconfig/eslint.json"
@@ -56,6 +63,7 @@
     "README.md"
   ],
   "dependencies": {
+    "@clack/prompts": "^0.7.0",
     "@eslint/js": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -117,6 +125,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^3.0.0"
   }
 }

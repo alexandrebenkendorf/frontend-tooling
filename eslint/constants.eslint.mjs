@@ -66,15 +66,4 @@ export const RUNTIME_RULES = {
   'default-case-last': 'error',
   'no-use-before-define': ['error', { functions: false, classes: true, variables: true }],
   'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
-
-  // Style
-  'max-len': [
-    'error',
-    {
-      code: 200,
-      ignoreStrings: true,
-      ignoreTemplateLiterals: true,
-      ignoreComments: true,
-    },
-  ],
 };

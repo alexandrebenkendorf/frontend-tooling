@@ -44,6 +44,8 @@ The `eslintrc` format was deprecated in ESLint 8 and removed in ESLint 9. Buildi
 
 The blocker is `eslint-plugin-import`, which does not yet support ESLint 10 at the time of this writing. Import rules are a meaningful part of the shared config, and dropping them to upgrade ESLint would be a net regression. The constraint will be lifted once `eslint-plugin-import` (or a maintained fork) supports ESLint 10.
 
+This also locks the TypeScript resolver to v3 (`eslint-import-resolver-typescript@^3`). Version 4 of that resolver was redesigned for `eslint-plugin-import-x` and uses a resolver interface incompatible with `eslint-plugin-import` v2. When the time comes to migrate to `import-x`, bumping the resolver to v4 is part of the same move.
+
 ---
 
 ## Prettier print width at 120

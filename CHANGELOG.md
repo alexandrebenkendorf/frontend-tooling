@@ -10,6 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.4.1] - 2026-04-21
+
+### Fixed
+
+- Downgraded `eslint-import-resolver-typescript` from `^4` to `^3`. Version 4 was redesigned for `eslint-plugin-import-x` and uses a resolver interface that `eslint-plugin-import` v2 does not support, causing a `typescript with invalid interface loaded as resolver` error at lint time.
+
+---
+
 ## [1.4.0] - 2026-04-21
 
 ### Added

@@ -6,11 +6,11 @@ const TEST_TS_FILE_GLOB = `**/*.{${TEST_FILE_SUFFIXES.join(',')}}.{ts,tsx,mts,ct
 const DEV_TEST_FILE_GLOB = `**/*.{${TEST_FILE_SUFFIXES.join(',')}}.{js,jsx,ts,tsx,mjs,cjs,mts,cts}`;
 
 export const DEFAULT_PATTERNS = {
-  jsFiles: ['**/*.{js,jsx,mjs,cjs,ejs}'],
+  jsFiles: ['**/*.{js,jsx,mjs,cjs}'],
   tsFiles: ['**/*.{ts,tsx,mts,cts}'],
   reactJsFiles: ['**/*.jsx'],
   reactTsFiles: ['**/*.tsx'],
-  srcJsFiles: ['**/src/**/*.{js,jsx,mjs,cjs,ejs}'],
+  srcJsFiles: ['**/src/**/*.{js,jsx,mjs,cjs}'],
   srcTsFiles: ['**/src/**/*.{ts,tsx,mts,cts}'],
   testJsFiles: [TEST_JS_FILE_GLOB, '**/__tests__/**/*.{js,jsx,mjs,cjs}', '**/__mocks__/**/*.{js,jsx,mjs,cjs}'],
   testTsFiles: [TEST_TS_FILE_GLOB, '**/__tests__/**/*.{ts,tsx,mts,cts}', '**/__mocks__/**/*.{ts,tsx,mts,cts}'],
@@ -40,6 +40,7 @@ export const DEFAULT_IGNORES = [
   '**/dist/**/*',
   '**/node_modules/**/*',
   '**/*.d.{ts,mts,cts}',
+  '**/*.ejs',
   '.git',
   '.cache',
   '.next',

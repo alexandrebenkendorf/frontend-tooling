@@ -5,7 +5,7 @@ Shared frontend tooling configs for ESLint, Prettier, and TypeScript.
 ## Quick start
 
 ```sh
-npm install -D @alexandrebenkendorf/frontend-tooling eslint prettier typescript
+npm install -D @alexandrebenkendorf/frontend-tooling eslint prettier typescript typescript-eslint
 npx frontend-tooling-init
 ```
 

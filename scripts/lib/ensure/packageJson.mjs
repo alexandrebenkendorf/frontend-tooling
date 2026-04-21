@@ -27,7 +27,7 @@ export async function updatePackageJson(
   target.devDependencies[packageName] ??= `^${packageVersion}`;
 
   // Required peer deps — always added
-  for (const dep of ['eslint', 'prettier', 'typescript']) {
+  for (const dep of ['eslint', 'prettier', 'typescript', 'typescript-eslint']) {
     if (peerDependencies[dep]) {
       target.devDependencies[dep] ??= peerDependencies[dep];
     }

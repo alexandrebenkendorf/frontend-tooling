@@ -10,6 +10,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.4.2] - 2026-04-21
+
+### Fixed
+
+- Moved `typescript-eslint` from `dependencies` to `peerDependencies` so npm hoists `@typescript-eslint/parser` to the consumer's root `node_modules`, fixing a `parser not found` error caused by `eslint-plugin-import` using CJS `require()` which cannot traverse nested `node_modules`.
+- Added test file patterns (`**/*.test.ts`, `**/*.spec.ts`, etc.) and `coverage` to the `exclude` list in `tsconfig/base.json` so consumer production builds do not include test files by default.
+- Added `typescript-eslint` to the required peer dependencies injected by `frontend-tooling-init`.
+
+---
+
 ## [1.4.1] - 2026-04-21
 
 ### Fixed

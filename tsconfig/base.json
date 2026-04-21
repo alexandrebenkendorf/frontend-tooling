@@ -25,5 +25,5 @@
     "checkJs": false,
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["dist", "node_modules", "coverage", "**/*.test.ts", "**/*.test.tsx", "**/*.spec.ts", "**/*.spec.tsx"]
 }

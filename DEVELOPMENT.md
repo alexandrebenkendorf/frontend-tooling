@@ -8,7 +8,13 @@ This repository is not an app repo. Most changes here affect exported configs co
 
 ## Quick Links
 
-- [Package README](./README.md) - Consumer-facing install and usage docs
+- [Package README](./README.md) - Quick start and exports overview
+- [Initializer docs](./docs/init.md) - Flags, defaults, and legacy migration
+- [ESLint docs](./docs/eslint.md) - `createEslintConfig` full reference
+- [Prettier docs](./docs/prettier.md) - Prettier config and opt-in plugins
+- [TypeScript docs](./docs/typescript.md) - tsconfig usage and overrides
+- [lint-staged docs](./docs/lint-staged.md) - lint-staged setup and overrides
+- [Design](./DESIGN.md) - Why the key decisions were made
 - [Commit Conventions](#commit-conventions)
 - [Package Workflow](#package-workflow)
 - [Published Surface](#published-surface)

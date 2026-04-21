@@ -10,6 +10,36 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [1.4.0] - 2026-04-21
+
+### Added
+
+- `--dry-run` flag for `frontend-tooling-init`: previews what would be created or updated without writing any files.
+- Non-interactive CLI flags for `frontend-tooling-init`: `--react`/`--no-react`, `--test=vitest|jest|none`, `--prettier-sort-imports`/`--no-prettier-sort-imports`, `--prettier-ejs`/`--no-prettier-ejs`. Any pre-set flag skips its interactive prompt.
+- Type declarations (`.d.mts`) for the `prettier` and `lint-staged` package exports.
+- 25 BDD-style Vitest specs covering `detect`, `eslintConfig`, `prettier`, `tsconfig`, and `lintStaged` ensure modules.
+- 27 additional specs covering `createEslintConfig` output shape and lazy-loading behaviour, ESLint helper functions (`createConfigName`, `resolveListOption`, `mergeRules`), and `createWriters` write logic (skip, dry-run, create, update).
+- `npm test` script running Vitest.
+- `DESIGN.md` explaining the rationale behind key decisions (no install-time mutation, async lazy-loading, optional peer deps, flat config, ESLint 9.x, print width, strict TypeScript, no `--no-verify`, monorepo scope).
+- `docs/` folder with dedicated pages for the initializer, ESLint, Prettier, TypeScript, and lint-staged.
+
+### Changed
+
+- `frontend-tooling-init` now detects pre-existing config files before performing any writes, so the migration notice accurately reflects files that existed before the run rather than files created during it.
+- Interactive prompts replaced with `@clack/prompts` for a cleaner terminal UI.
+- `engines.node` tightened to `>=22.0.0` (Node 20 is EOL).
+- CI and publish workflows bumped to Node 22; `NODE_AUTH_TOKEN` scoped to the publish step only.
+- Test step added to both CI and publish workflows.
+- Spec files moved to `tests/` so they are excluded from the published package.
+- README split into a concise quick-start front door; full reference content moved to `docs/`.
+
+### Fixed
+
+- Removed the redundant `max-len` ESLint rule (`code: 200`) from shared runtime rules — Prettier already enforces the print width.
+- Removed dead `createManagedFileWriter` export from `scripts/lib/fs.mjs`.
+
+---
+
 ## [1.3.1] - 2026-04-18
 
 ### Changed

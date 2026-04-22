@@ -1,6 +1,6 @@
 {
   "name": "@alexandrebenkendorf/frontend-tooling",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "Shared frontend tooling configs",
   "license": "MIT",
   "type": "module",

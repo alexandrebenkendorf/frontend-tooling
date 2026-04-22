@@ -39,7 +39,7 @@ export const ejsConfig = {
  * export default { ...baseConfig, ...sortImportsConfig };
  */
 export const sortImportsConfig = {
-  importOrder: ['^node:(.*)$', '<THIRD_PARTY_MODULES>', '^~/(.*)$', '^../(.*)$', '^[./]'],
+  importOrder: ['^node:(.*)$', '<THIRD_PARTY_MODULES>', '^@/(.*)$', '^~/(.*)$', '^../(.*)$', '^[./]'],
   importOrderParserPlugins: ['importAssertions', 'typescript', 'jsx'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,

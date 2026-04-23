@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      version: ${{ steps.version.outputs.value }}
+      tag_created: ${{ steps.tag_exists.outputs.exists == 'false' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -30,3 +33,9 @@ jobs:
         run: |
           git tag "v${{ steps.version.outputs.value }}"
           git push origin "v${{ steps.version.outputs.value }}"
+
+  publish:
+    needs: tag
+    if: needs.tag.outputs.tag_created == 'true'
+    uses: ./.github/workflows/publish.yml
+    secrets: inherit

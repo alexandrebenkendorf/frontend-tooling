@@ -16,7 +16,7 @@ This also means the package is safe to install in projects that are not yet read
 
 ## Async lazy-loading for optional plugins
 
-`createEslintConfig` is async and lazy-loads feature-specific config modules (`react.eslint.mjs`, `test.eslint.mjs`, `import.eslint.mjs`) only when that feature is enabled.
+`defineEslintConfig` is async and lazy-loads feature-specific config modules (`react.eslint.mjs`, `test.eslint.mjs`, `import.eslint.mjs`) only when that feature is enabled.
 
 The reason is that those modules import optional peer dependencies (`eslint-plugin-react`, `@vitest/eslint-plugin`, `eslint-plugin-import`, etc.). If the module were loaded eagerly at import time, ESLint would throw a `Cannot find module` error for any peer dep the consumer did not install. Lazy-loading means you only need what you actually use.
 
@@ -76,4 +76,4 @@ Adding an escape hatch in the template teaches contributors to bypass the hook r
 
 The init script and default config patterns target single-root projects. Monorepo setups (Turborepo, Nx, Yarn workspaces) are out of scope.
 
-Monorepos vary too much in structure to handle generically: some use shared root configs, some use per-package configs, some combine both. Adding half-working monorepo support would mean more assumptions and more ways to produce wrong config. The extension points in `createEslintConfig` (`patterns`, `ignores`, `overrides.extraConfigs`) are enough for a monorepo consumer to wire up their own per-package config. Full monorepo support is a future addition, not a current goal.
+Monorepos vary too much in structure to handle generically: some use shared root configs, some use per-package configs, some combine both. Adding half-working monorepo support would mean more assumptions and more ways to produce wrong config. The extension points in `defineEslintConfig` (`patterns`, `ignores`, `extraConfigs`) are enough for a monorepo consumer to wire up their own per-package config. Full monorepo support is a future addition, not a current goal.

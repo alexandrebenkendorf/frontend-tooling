@@ -1,19 +1,20 @@
 import path from 'node:path';
 
 export async function ensureEslintConfig({ cwd, packageName, write }, choices) {
-  const optionLines = [];
-  if (!choices.react) {
-    optionLines.push(`  includeReact: false,`);
+  const optionLines = [`  includeImport: true,`];
+  if (choices.react) {
+    optionLines.push(`  includeReact: true,`);
   }
   if (choices.testFramework !== 'none') {
+    optionLines.push(`  includeTest: true,`);
     optionLines.push(`  testFramework: '${choices.testFramework}',`);
   }
 
-  const extraOptions = optionLines.length > 0 ? `\n${optionLines.join('\n')}` : '';
+  const extraOptions = `\n${optionLines.join('\n')}`;
 
-  const content = `import createEslintConfig from '${packageName}/eslint';
+  const content = `import defineEslintConfig from '${packageName}/eslint';
 
-export default await createEslintConfig({
+export default await defineEslintConfig({
   project: ['./tsconfig.eslint.json'],
   tsconfigRootDir: import.meta.dirname,${extraOptions}
 });

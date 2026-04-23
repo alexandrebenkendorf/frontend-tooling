@@ -10,7 +10,7 @@ This repository is not an app repo. Most changes here affect exported configs co
 
 - [Package README](./README.md) - Quick start and exports overview
 - [Initializer docs](./docs/init.md) - Flags, defaults, and legacy migration
-- [ESLint docs](./docs/eslint.md) - `createEslintConfig` full reference
+- [ESLint docs](./docs/eslint.md) - `defineEslintConfig` full reference
 - [Prettier docs](./docs/prettier.md) - Prettier config and opt-in plugins
 - [TypeScript docs](./docs/typescript.md) - tsconfig usage and overrides
 - [lint-staged docs](./docs/lint-staged.md) - lint-staged setup and overrides
@@ -117,7 +117,7 @@ Preferred format for this repo:
 ```bash
 git commit -m "feat: Add exported lint-staged config"
 git commit -m "fix: Remove repo-specific tsconfig defaults"
-git commit -m "docs: Expand createEslintConfig examples"
+git commit -m "docs: Expand defineEslintConfig examples"
 git commit -m "chore: Add Husky pre-commit hook"
 ```
 
@@ -146,7 +146,7 @@ git commit -m "chore: Add Husky pre-commit hook"
 | Concept          | Convention             | Example                  |
 | ---------------- | ---------------------- | ------------------------ |
 | Package files    | descriptive + explicit | `lint-staged.config.mjs` |
-| Export helpers   | `camelCase`            | `createEslintConfig`     |
+| Export helpers   | `camelCase`            | `defineEslintConfig`     |
 | Utility modules  | `kebab-case`           | `import.eslint.mjs`      |
 | JSON config file | explicit purpose       | `tsconfig.eslint.json`   |
 
@@ -164,7 +164,7 @@ git commit -m "chore: Add Husky pre-commit hook"
 ### Key Principles
 
 - Validate exported behavior and package shape, not app runtime.
-- Test files live in `tests/` mirroring the source structure (e.g. `tests/ensure/prettier.spec.mjs` mirrors `scripts/lib/ensure/prettier.mjs`).
+- Test files live in `tests/` mirroring the source structure (e.g. `tests/ensure/prettierConfig.spec.mjs` mirrors `scripts/lib/ensure/prettierConfig.mjs`).
 - Use `vitest` with `describe` / `it('should ...')` — BDD-style descriptions.
 - Mock the `write` callback in `ensure/` tests rather than touching the filesystem.
 - When package surface changes, always run `npm pack --dry-run --cache /tmp/frontend-tooling-npm-cache`.

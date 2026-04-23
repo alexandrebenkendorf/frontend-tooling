@@ -35,7 +35,7 @@ npm install -D prettier-plugin-ejs
 | Export                                                       | Purpose                                               |
 | ------------------------------------------------------------ | ----------------------------------------------------- |
 | `@alexandrebenkendorf/frontend-tooling/eslint`               | Async ESLint flat config builder                      |
-| `@alexandrebenkendorf/frontend-tooling/prettier`             | Shared Prettier config + opt-in plugin configs        |
+| `@alexandrebenkendorf/frontend-tooling/prettier`             | `definePrettierConfig` builder with opt-in plugins    |
 | `@alexandrebenkendorf/frontend-tooling/lint-staged`          | Shared lint-staged config                             |
 | `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`   | Base TypeScript config (browser + bundler)            |
 | `@alexandrebenkendorf/frontend-tooling/tsconfig/node.json`   | TypeScript config for Node.js projects                |
@@ -45,8 +45,8 @@ npm install -D prettier-plugin-ejs
 ## Documentation
 
 - [Initializer — flags, defaults, legacy migration](docs/init.md)
-- [ESLint — `createEslintConfig` full reference](docs/eslint.md)
-- [Prettier — config usage and opt-in plugins](docs/prettier.md)
+- [ESLint — `defineEslintConfig` full reference](docs/eslint.md)
+- [Prettier — `definePrettierConfig` builder](docs/prettier.md)
 - [TypeScript — tsconfig usage and overrides](docs/typescript.md)
 - [lint-staged — setup and override patterns](docs/lint-staged.md)
 - [Design — why the key decisions were made](DESIGN.md)

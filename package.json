@@ -1,6 +1,6 @@
 {
   "name": "@alexandrebenkendorf/frontend-tooling",
-  "version": "1.4.4",
+  "version": "2.0.0-rc.0",
   "description": "Shared frontend tooling configs",
   "license": "MIT",
   "type": "module",
@@ -36,8 +36,8 @@
   },
   "exports": {
     "./eslint": {
-      "types": "./eslint/createEslintConfig.d.mts",
-      "default": "./eslint/createEslintConfig.mjs"
+      "types": "./eslint/index.d.mts",
+      "default": "./eslint/index.mjs"
     },
     "./lint-staged": {
       "types": "./lint-staged/index.d.mts",

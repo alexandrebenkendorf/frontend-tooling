@@ -6,7 +6,7 @@ This repository is the source for the published package `@alexandrebenkendorf/fr
 
 If a user wants to use this package in another repo, prefer the explicit integration flow:
 
-1. `npm install -D @alexandrebenkendorf/frontend-tooling eslint prettier typescript`
+1. `npm install -D @alexandrebenkendorf/frontend-tooling eslint prettier typescript typescript-eslint`
 2. `npx frontend-tooling-init`
 
 The init command is the supported way to patch a consumer repo. Do not assume `npm install` alone should silently rewrite consumer files.

@@ -12,26 +12,26 @@ import { createTsConfigs } from './ts.eslint.mjs';
  * options, then appends Prettier compatibility at the end. Feature sets are
  * lazy-loaded so unused plugins are never imported.
  *
- * @param {import('./createEslintConfig.mjs').CreateEslintConfigOptions} options
+ * @param {import('./defineEslintConfig.mjs').DefineEslintConfigOptions} options
  * @returns {Promise<import('eslint').Linter.Config[]>}
  */
-export default async function createEslintConfig({
+export default async function defineEslintConfig({
   project,
   tsconfigRootDir,
-  includeImport = true,
-  includeReact = true,
-  includeTest = true,
+  includeImport,
+  includeReact,
+  includeTest,
   testFramework,
   nameSuffix = '',
   patterns = {},
   ignores,
   importOptions = {},
   rules = {},
-  overrides: { extraIgnores = [], extraConfigs = [] } = {},
+  extraConfigs = [],
 }) {
   const resolvedPatterns = resolvePatterns(patterns);
   const resolvedImportOptions = resolveImportOptions(importOptions);
-  const resolvedIgnores = resolveIgnores(ignores, extraIgnores);
+  const resolvedIgnores = resolveIgnores(ignores);
   const importConfigs = includeImport
     ? (await import('./import.eslint.mjs')).createImportConfigs({
         project,

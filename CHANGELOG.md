@@ -6,7 +6,54 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
-## [Unreleased]
+## [2.0.0-rc.0] - 2026-04-23
+
+### Breaking changes
+
+- **`createEslintConfig` renamed to `defineEslintConfig`** — aligns with the `defineConfig` convention from Vite/Rsbuild. Update your import:
+  ```js
+  // before
+  import createEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
+  // after
+  import defineEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
+  ```
+- **`overrides` option removed from `defineEslintConfig`.** Migrate as follows:
+  - `overrides.extraConfigs` → root `extraConfigs`
+  - `overrides.extraIgnores` → `ignores: { extend: [...] }`
+- **All list fields now accept `ListOption<T>`** (`T[] | { extend?: T[]; replace?: boolean }`).  
+  Previously, passing a `string[]` to `ignores` already replaced the default; this is unchanged.  
+  The `{ extend }` shape is new and now the recommended way to append without discarding defaults.
+- **`includeImport`, `includeReact`, `includeTest` now default to `false`** — these feature flags are now opt-in. Previously they defaulted to `true`, requiring `false` to disable. Update your config to explicitly enable the ones you use:
+  ```js
+  // before (relied on defaults)
+  export default await defineEslintConfig({ project: [...], tsconfigRootDir: ... });
+  // after (explicit opt-in)
+  export default await defineEslintConfig({
+    project: [...],
+    tsconfigRootDir: ...,
+    includeImport: true,
+    includeReact: true,
+    includeTest: true,
+    testFramework: 'vitest',
+  });
+  ```
+- **`prettier` export no longer exports `baseConfig`, `ejsConfig`, or `sortImportsConfig`** — these are now internal implementation details. Remove any imports of these named exports and migrate to `definePrettierConfig`:
+  ```js
+  // before
+  import baseConfig, { ejsConfig, sortImportsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+  export default { ...baseConfig, ...ejsConfig, ...sortImportsConfig };
+  // after
+  import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
+  export default definePrettierConfig({ ejs: true, sortImports: true });
+  ```
+
+### Added
+
+- **`definePrettierConfig(options?)`** — new builder function exported as the default from `prettier`. Pass `ejs: true` and/or `sortImports: true` to enable the corresponding plugins. Any other keys are treated as Prettier overrides. Plugin configs (`ejsConfig`, `sortImportsConfig`, `baseConfig`) are now internal implementation details and no longer exported.
+- **`DefinePrettierConfigOptions` type exported** from `prettier`.
+- **`ListOption<T>` type exported** from `eslint/defineEslintConfig.d.mts` for use in consumer wrappers.
+- **`RulesOverrides` interface exported** — replaces the previous untyped `Linter.RulesRecord` for `rules`, exposing all named per-group keys (`js`, `ts`, `react`, `test`, `import`, `jsNonSrcConsole`, etc.).
+- `importOptions.resolverExtensions`, `importOptions.aliasExtensions`, and `importOptions.aliasMap` now accept `ListOption<T>` (previously only plain arrays).
 
 ---
 

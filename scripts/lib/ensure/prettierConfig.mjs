@@ -3,27 +3,25 @@ import path from 'node:path';
 export async function ensurePrettierConfig({ cwd, packageName, write }, choices) {
   let content;
   if (choices.prettierEjs && choices.prettierSortImports) {
-    content = `import baseConfig, { ejsConfig, sortImportsConfig } from '${packageName}/prettier';
+    content = `import definePrettierConfig from '${packageName}/prettier';
 
-export default {
-  ...baseConfig,
-  ...ejsConfig,
-  ...sortImportsConfig,
-  plugins: [...ejsConfig.plugins, ...sortImportsConfig.plugins],
-};
+export default definePrettierConfig({ ejs: true, sortImports: true });
 `;
   } else if (choices.prettierEjs) {
-    content = `import baseConfig, { ejsConfig } from '${packageName}/prettier';
+    content = `import definePrettierConfig from '${packageName}/prettier';
 
-export default { ...baseConfig, ...ejsConfig };
+export default definePrettierConfig({ ejs: true });
 `;
   } else if (choices.prettierSortImports) {
-    content = `import baseConfig, { sortImportsConfig } from '${packageName}/prettier';
+    content = `import definePrettierConfig from '${packageName}/prettier';
 
-export default { ...baseConfig, ...sortImportsConfig };
+export default definePrettierConfig({ sortImports: true });
 `;
   } else {
-    content = `export { default } from '${packageName}/prettier';\n`;
+    content = `import definePrettierConfig from '${packageName}/prettier';
+
+export default definePrettierConfig();
+`;
   }
 
   await write(path.join(cwd, 'prettier.config.mjs'), content);

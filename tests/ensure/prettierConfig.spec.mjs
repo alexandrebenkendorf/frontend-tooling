@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { ensurePrettierConfig, ensurePrettierIgnore } from '../../scripts/lib/ensure/prettier.mjs';
+import { ensurePrettierConfig, ensurePrettierIgnore } from '../../scripts/lib/ensure/prettierConfig.mjs';
 
 function makeCtx() {
   let writtenPath;
@@ -19,35 +19,37 @@ function makeCtx() {
 }
 
 describe('ensurePrettierConfig', () => {
-  it('should generate a re-export for the base config when no plugins are selected', async () => {
+  it('should generate a base definePrettierConfig call when no plugins are selected', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensurePrettierConfig(ctx, { prettierEjs: false, prettierSortImports: false });
-    expect(getWritten().content).toBe("export { default } from '@test/pkg/prettier';\n");
+    const { content } = getWritten();
+    expect(content).toContain('definePrettierConfig');
+    expect(content).not.toContain('ejs');
+    expect(content).not.toContain('sortImports');
   });
 
-  it('should generate a config with ejsConfig only when prettierEjs is enabled', async () => {
+  it('should generate a config with ejs: true when prettierEjs is enabled', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensurePrettierConfig(ctx, { prettierEjs: true, prettierSortImports: false });
     const { content } = getWritten();
-    expect(content).toContain('ejsConfig');
-    expect(content).not.toContain('sortImportsConfig');
+    expect(content).toContain('ejs: true');
+    expect(content).not.toContain('sortImports');
   });
 
-  it('should generate a config with sortImportsConfig only when prettierSortImports is enabled', async () => {
+  it('should generate a config with sortImports: true when prettierSortImports is enabled', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensurePrettierConfig(ctx, { prettierEjs: false, prettierSortImports: true });
     const { content } = getWritten();
-    expect(content).toContain('sortImportsConfig');
-    expect(content).not.toContain('ejsConfig');
+    expect(content).toContain('sortImports: true');
+    expect(content).not.toContain('ejs: true');
   });
 
-  it('should generate a config with both ejsConfig and sortImportsConfig when both plugins are enabled', async () => {
+  it('should generate a config with both flags when both plugins are enabled', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensurePrettierConfig(ctx, { prettierEjs: true, prettierSortImports: true });
     const { content } = getWritten();
-    expect(content).toContain('ejsConfig');
-    expect(content).toContain('sortImportsConfig');
-    expect(content).toContain('plugins: [...ejsConfig.plugins, ...sortImportsConfig.plugins]');
+    expect(content).toContain('ejs: true');
+    expect(content).toContain('sortImports: true');
   });
 
   it('should write to prettier.config.mjs in the cwd', async () => {

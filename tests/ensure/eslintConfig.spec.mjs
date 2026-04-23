@@ -20,25 +20,30 @@ function makeCtx(overrides = {}) {
 }
 
 describe('ensureEslintConfig', () => {
-  it('should generate a base config with no extra options when react is enabled and no test framework is set', async () => {
-    const { ctx, getWritten } = makeCtx();
-    await ensureEslintConfig(ctx, { react: true, testFramework: 'none' });
-    const { content } = getWritten();
-    expect(content).toContain("import createEslintConfig from '@test/pkg/eslint'");
-    expect(content).not.toContain('includeReact');
-    expect(content).not.toContain('testFramework');
-  });
-
-  it('should include includeReact: false when react is disabled', async () => {
+  it('should always include includeImport: true', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensureEslintConfig(ctx, { react: false, testFramework: 'none' });
-    expect(getWritten().content).toContain('includeReact: false');
+    expect(getWritten().content).toContain('includeImport: true');
   });
 
-  it('should include testFramework: vitest when vitest is chosen', async () => {
+  it('should include includeReact: true when react is enabled', async () => {
+    const { ctx, getWritten } = makeCtx();
+    await ensureEslintConfig(ctx, { react: true, testFramework: 'none' });
+    expect(getWritten().content).toContain('includeReact: true');
+  });
+
+  it('should not include includeReact when react is disabled', async () => {
+    const { ctx, getWritten } = makeCtx();
+    await ensureEslintConfig(ctx, { react: false, testFramework: 'none' });
+    expect(getWritten().content).not.toContain('includeReact');
+  });
+
+  it('should include includeTest: true and testFramework when a framework is chosen', async () => {
     const { ctx, getWritten } = makeCtx();
     await ensureEslintConfig(ctx, { react: true, testFramework: 'vitest' });
-    expect(getWritten().content).toContain("testFramework: 'vitest'");
+    const { content } = getWritten();
+    expect(content).toContain('includeTest: true');
+    expect(content).toContain("testFramework: 'vitest'");
   });
 
   it('should include testFramework: jest when jest is chosen', async () => {
@@ -47,12 +52,12 @@ describe('ensureEslintConfig', () => {
     expect(getWritten().content).toContain("testFramework: 'jest'");
   });
 
-  it('should include both includeReact: false and testFramework when react is disabled and a framework is set', async () => {
+  it('should not include includeTest or testFramework when no framework is set', async () => {
     const { ctx, getWritten } = makeCtx();
-    await ensureEslintConfig(ctx, { react: false, testFramework: 'vitest' });
+    await ensureEslintConfig(ctx, { react: true, testFramework: 'none' });
     const { content } = getWritten();
-    expect(content).toContain('includeReact: false');
-    expect(content).toContain("testFramework: 'vitest'");
+    expect(content).not.toContain('includeTest');
+    expect(content).not.toContain('testFramework');
   });
 
   it('should write to eslint.config.mjs in the cwd', async () => {

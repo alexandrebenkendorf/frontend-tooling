@@ -83,8 +83,8 @@ export function resolvePatterns(patterns = {}) {
   };
 }
 
-export function resolveIgnores(ignores, extraIgnores = []) {
-  return [...resolveListOption(DEFAULT_IGNORES, ignores), ...extraIgnores];
+export function resolveIgnores(ignores) {
+  return resolveListOption(DEFAULT_IGNORES, ignores);
 }
 
 export function resolveImportOptions(importOptions = {}) {

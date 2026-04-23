@@ -1,25 +1,31 @@
 # Prettier
 
-The `prettier` export provides the shared Prettier config and opt-in plugin configs.
+The `prettier` export provides `definePrettierConfig` — the recommended way to compose the shared base with opt-in plugins and your own overrides.
 
 ## Basic setup
 
 ```js
-export { default } from '@alexandrebenkendorf/frontend-tooling/prettier';
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default definePrettierConfig();
 ```
 
-## Overriding settings
+## `definePrettierConfig`
 
-Import the shared config and spread your overrides after it:
+Starts from the shared base config and applies your options. Pass `ejs: true` and/or `sortImports: true` to enable the corresponding plugins. Any other keys are treated as Prettier overrides applied last.
 
 ```js
-import baseConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
 
-export default {
-  ...baseConfig,
-  printWidth: 100,
-  singleQuote: false,
-};
+export default definePrettierConfig({ printWidth: 80 });
+```
+
+With plugins:
+
+```js
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default definePrettierConfig({ ejs: true, sortImports: true });
 ```
 
 ## Default settings
@@ -47,9 +53,9 @@ npm install -D prettier-plugin-ejs
 ```
 
 ```js
-import baseConfig, { ejsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
 
-export default { ...baseConfig, ...ejsConfig };
+export default definePrettierConfig({ ejs: true });
 ```
 
 ## Import sorting (opt-in)
@@ -61,22 +67,15 @@ npm install -D @trivago/prettier-plugin-sort-imports
 ```
 
 ```js
-import baseConfig, { sortImportsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
 
-export default { ...baseConfig, ...sortImportsConfig };
+export default definePrettierConfig({ sortImports: true });
 ```
 
 ## Using both plugins together
 
-When combining plugins, merge the `plugins` arrays explicitly to avoid one overwriting the other:
-
 ```js
-import baseConfig, { ejsConfig, sortImportsConfig } from '@alexandrebenkendorf/frontend-tooling/prettier';
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
 
-export default {
-  ...baseConfig,
-  ...ejsConfig,
-  ...sortImportsConfig,
-  plugins: [...ejsConfig.plugins, ...sortImportsConfig.plugins],
-};
+export default definePrettierConfig({ ejs: true, sortImports: true });
 ```

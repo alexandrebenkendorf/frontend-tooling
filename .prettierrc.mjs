@@ -1,3 +1,3 @@
-import baseConfig, { sortImportsConfig } from './prettier/index.mjs';
+import definePrettierConfig from './prettier/index.mjs';
 
-export default { ...baseConfig, ...sortImportsConfig };
+export default definePrettierConfig({ sortImports: true });

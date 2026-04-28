@@ -6,6 +6,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [2.1.0] - 2026-04-28
+
+### Breaking changes
+
+- **`tsconfig/base.json` no longer includes `jsx: react-jsx` or DOM libs.** It is now a strict generic base with no framework assumptions (`lib: ["ESNext"]` only). If your project extends `base.json` and relies on React JSX or DOM types, switch to the new `tsconfig/react.json`:
+  ```json
+  {
+    "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig/react.json"
+  }
+  ```
+
+### Added
+
+- **`tsconfig/react.json`** — new preset extending `base.json` with `jsx: react-jsx` and `lib: ["ESNext", "DOM", "DOM.Iterable"]`. Exported as `@alexandrebenkendorf/frontend-tooling/tsconfig/react.json`.
+- **`frontend-tooling-init` now generates `tsconfig.node.json`** alongside `tsconfig.json`, covering tooling files (`vite.config.ts`, `*.config.ts`, `scripts/**/*`).
+- **`frontend-tooling-init` now generates a project-references `tsconfig.eslint.json`** (`files: [], references: [...]`) instead of a config that extends `tsconfig.json` directly.
+- **`frontend-tooling-init` selects `tsconfig/react.json` or `tsconfig/base.json`** for the generated `tsconfig.json` based on the react prompt answer.
+
+### Fixed
+
+- React ESLint config now applies rules to `.jsx` and `.js` files in addition to `.tsx` and `.ts`.
+- Removed `eslint-plugin-react`, `eslint-plugin-react-hooks`, `eslint-plugin-jsx-a11y`, `eslint-plugin-import`, and `eslint-config-prettier` from the legacy dependency detection list — these are valid modern dependencies and should not trigger a migration warning.
+
+---
+
 ## [2.0.0] - 2026-04-23
 
 ### Breaking changes

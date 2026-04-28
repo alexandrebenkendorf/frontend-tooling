@@ -64,6 +64,7 @@ const {
   updatePackageJson,
   ensureEditorConfig,
   ensureTsconfigJson,
+  ensureTsconfigNodeJson,
   ensureTsconfigEslintJson,
   ensureEslintConfig,
   ensurePrettierConfig,
@@ -85,7 +86,8 @@ const {
 
 const updatedPackageJson = await updatePackageJson(choices);
 await ensureEditorConfig();
-await ensureTsconfigJson();
+await ensureTsconfigJson(choices);
+await ensureTsconfigNodeJson();
 await ensureTsconfigEslintJson();
 await ensureEslintConfig(choices);
 await ensurePrettierConfig(choices);

@@ -11,6 +11,7 @@ import {
   ensurePrettierIgnore,
   ensureTsconfigEslintJson,
   ensureTsconfigJson,
+  ensureTsconfigNodeJson,
   updatePackageJson,
 } from './ensure/index.mjs';
 
@@ -63,7 +64,8 @@ export function createWriters({
   return {
     updatePackageJson: (choices) => updatePackageJson(ctx, choices),
     ensureEditorConfig: () => ensureEditorConfig(ctx),
-    ensureTsconfigJson: () => ensureTsconfigJson(ctx),
+    ensureTsconfigJson: (choices) => ensureTsconfigJson(ctx, choices),
+    ensureTsconfigNodeJson: () => ensureTsconfigNodeJson(ctx),
     ensureTsconfigEslintJson: () => ensureTsconfigEslintJson(ctx),
     ensureEslintConfig: (choices) => ensureEslintConfig(ctx, choices),
     ensurePrettierConfig: (choices) => ensurePrettierConfig(ctx, choices),

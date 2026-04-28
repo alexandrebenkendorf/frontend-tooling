@@ -12,7 +12,7 @@ export function createReactConfigs({ nameSuffix = '', patterns, rules = {} } = {
   return [
     {
       name: createConfigName('react', nameSuffix),
-      files: patterns.reactTsFiles,
+      files: [...patterns.reactTsFiles, ...patterns.reactJsFiles],
       plugins: {
         react: reactPlugin,
         'react-hooks': reactHooksPlugin,

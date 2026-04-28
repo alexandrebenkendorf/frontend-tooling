@@ -67,6 +67,7 @@ Current exported package surface:
 - `@alexandrebenkendorf/frontend-tooling/lint-staged`
 - `@alexandrebenkendorf/frontend-tooling/prettier`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`
+- `@alexandrebenkendorf/frontend-tooling/tsconfig/react.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/eslint.json`
 - `@alexandrebenkendorf/frontend-tooling/tsconfig/node.json`
 - `.editorconfig` (distributed to consumer projects via `frontend-tooling-init`)

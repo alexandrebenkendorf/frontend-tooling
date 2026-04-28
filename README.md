@@ -37,7 +37,8 @@ npm install -D prettier-plugin-ejs
 | `@alexandrebenkendorf/frontend-tooling/eslint`               | Async ESLint flat config builder                      |
 | `@alexandrebenkendorf/frontend-tooling/prettier`             | `definePrettierConfig` builder with opt-in plugins    |
 | `@alexandrebenkendorf/frontend-tooling/lint-staged`          | Shared lint-staged config                             |
-| `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`   | Base TypeScript config (browser + bundler)            |
+| `@alexandrebenkendorf/frontend-tooling/tsconfig/base.json`   | Base TypeScript config (strict, generic, no jsx/DOM)  |
+| `@alexandrebenkendorf/frontend-tooling/tsconfig/react.json`  | TypeScript config for React projects (jsx + DOM)      |
 | `@alexandrebenkendorf/frontend-tooling/tsconfig/node.json`   | TypeScript config for Node.js projects                |
 | `@alexandrebenkendorf/frontend-tooling/tsconfig/eslint.json` | TypeScript config scoped to ESLint type-checks        |
 | `.editorconfig`                                              | Copied to consumer project by `frontend-tooling-init` |
@@ -50,3 +51,61 @@ npm install -D prettier-plugin-ejs
 - [TypeScript — tsconfig usage and overrides](docs/typescript.md)
 - [lint-staged — setup and override patterns](docs/lint-staged.md)
 - [Design — why the key decisions were made](DESIGN.md)
+
+## Usage examples
+
+### TypeScript
+
+React project (`tsconfig.json`):
+
+```json
+{
+  "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig/react.json",
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "**/*.mjs", "**/*.cjs"]
+}
+```
+
+Tooling files (`tsconfig.node.json`):
+
+```json
+{
+  "extends": "@alexandrebenkendorf/frontend-tooling/tsconfig/node.json",
+  "include": ["vite.config.ts", "*.config.ts", "scripts/**/*"]
+}
+```
+
+ESLint type-checking (`tsconfig.eslint.json`):
+
+```json
+{
+  "files": [],
+  "references": [{ "path": "./tsconfig.json" }, { "path": "./tsconfig.node.json" }]
+}
+```
+
+Non-React project uses `tsconfig/base.json` instead of `tsconfig/react.json`. See [docs/typescript.md](docs/typescript.md) for overrides.
+
+### ESLint
+
+```js
+// eslint.config.mjs
+import defineEslintConfig from '@alexandrebenkendorf/frontend-tooling/eslint';
+
+export default await defineEslintConfig({ includeReact: true, testFramework: 'vitest' });
+```
+
+### Prettier
+
+```js
+// prettier.config.mjs
+import definePrettierConfig from '@alexandrebenkendorf/frontend-tooling/prettier';
+
+export default definePrettierConfig({ sortImports: true });
+```
+
+### lint-staged
+
+```js
+// lint-staged.config.mjs
+export { default } from '@alexandrebenkendorf/frontend-tooling/lint-staged';
+```

@@ -48,6 +48,7 @@
       "default": "./prettier/index.mjs"
     },
     "./tsconfig/base.json": "./tsconfig/base.json",
+    "./tsconfig/react.json": "./tsconfig/react.json",
     "./tsconfig/node.json": "./tsconfig/node.json",
     "./tsconfig/eslint.json": "./tsconfig/eslint.json"
   },

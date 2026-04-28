@@ -3,14 +3,9 @@ import path from 'node:path';
 
 const LEGACY_DEPENDENCY_PATTERNS = [
   /^eslint-config-airbnb(?:-base)?$/,
-  /^eslint-plugin-react$/,
-  /^eslint-plugin-react-hooks$/,
-  /^eslint-plugin-jsx-a11y$/,
-  /^eslint-plugin-import$/,
   /^babel-eslint$/,
   /^@babel\/eslint-parser$/,
   /^eslint-config-standard$/,
-  /^eslint-config-prettier$/,
   /^eslint-plugin-node$/,
   /^eslint-plugin-promise$/,
 ];
